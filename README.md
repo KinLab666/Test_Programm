@@ -41,13 +41,13 @@ Windows:
  venv\Scripts\activate
 ```
 ### Установите зависимости:
-
-- pip install -r requirements.txt
-
+```
+ pip install -r requirements.txt
+```
 ### Запустите приложение:
-
-- python app.py
-
+```
+ python app.py
+```
 - API будет доступен по адресу: http://localhost:5000
 
 ### База данных
