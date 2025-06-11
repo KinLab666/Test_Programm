@@ -23,7 +23,8 @@
 
 ### Как запустить:
 
- Склонируйте репозиторий: [Ссылка]([https://github.com/vmangos/wiki](https://github.com/KinLab666/Test_Programm.git))
+ Склонируйте репозиторий: 
+ [Ссылка]([https://github.com/vmangos/wiki](https://github.com/KinLab666/Test_Programm.git))
 
 ### Создайте виртуальное окружение
 
