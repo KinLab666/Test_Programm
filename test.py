@@ -32,7 +32,7 @@ def test_update_task(client):
         "description": "описание изменено",
         "tags": ["изменено"]
     })
-    assert response.status_code == 201
+    assert response.status_code == 200
     data = json.loads(response.data)
     assert data["title"] == "Тестовая задача измененная"
 
@@ -47,8 +47,8 @@ def test_create_tag(client):
     assert data["name"] == "Тестовый"
 
 def test_update_tag(client):
-    response = client.put('/tags', json={"name": "измененная"})
-    assert response.status_code == 201
+    response = client.put('/tags/1', json={"name": "измененная"})
+    assert response.status_code == 200
     data = json.loads(response.data)
     assert data["name"] == "измененная"
 
