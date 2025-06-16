@@ -78,6 +78,6 @@ Windows:
 }
 ```
 
-## License
+## Лицензия
 
-See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
+Права и ограничения по лицензии см. в файле [LICENSE](LICENSE.md) (MIT).
