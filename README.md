@@ -1,7 +1,7 @@
 # О программе
 Это простое Flask-приложение, предоставляющее RESTful API для управления списком задач и тегов. Оно использует SQLite в качестве базы данных по умолчанию, имеет валидацию входящих данных и обработку ошибок.
 
-[Примеры запросов через Postman или curl](https://github.com/KinLab666/Test_Programm/blob/main/Query_Examples.md)
+[Примеры запросов через Postman или curl](Query_Examples.md)
 
 ### Функционал:
 
@@ -77,3 +77,7 @@ Windows:
    "ошибка": "Ошибка валидации"
 }
 ```
+
+## License
+
+See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
