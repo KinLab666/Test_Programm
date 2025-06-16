@@ -25,7 +25,7 @@ tag_schema = {
     }
 }
 
-# === CRUD TASKS ===
+# ЗАДАЧИ
 @app.route('/tasks', methods=['POST'])
 def create_task():
 
@@ -45,10 +45,22 @@ def create_task():
     try:
         data = request.get_json()
         validate(instance=data, schema=task_schema)
+
+        if not data.get('title'):
+            return jsonify({"Ошибка": "Требуется ввести название задачи"}), 400
+
+        if not data.get('description'):
+            return jsonify({"Ошибка": "Требуется ввести описание задачи"}), 400
+
         if Task.query.filter_by(title=data['title']).first():
             return jsonify({"Ошибка": "Задача с таким названием уже существует"}), 400
 
-        deadline = datetime.fromisoformat(data['deadline']) if data.get('deadline') else None
+        deadline = None
+        if data.get('deadline'):
+            try:
+                deadline = datetime.fromisoformat(data['deadline'])
+            except ValueError:
+                return jsonify({"Ошибка": "Некорректный формат даты дедлайна"}), 400
 
         new_task = Task(
             title=data['title'],
@@ -59,6 +71,10 @@ def create_task():
 
         if data.get('tags'):
             for tag_name in data['tags']:
+
+                if not tag_name:
+                    return jsonify({"Ошибка": "Имя тега не может быть пустым"}), 400
+
                 tag = Tag.query.filter_by(name=tag_name).first() or Tag(name=tag_name)
                 db.session.add(tag)
                 new_task.tags.append(tag)
@@ -128,16 +144,28 @@ def update_task(task_id):
 
     task.title = data.get('title', task.title)
     task.description = data.get('description', task.description)
+
+    if not data.get('title'):
+        return jsonify({"Ошибка": "Требуется ввести название задачи"}), 400
+
+    if not data.get('description'):
+        return jsonify({"Ошибка": "Описание задачи не может быть пустым"}), 400
+
     if 'deadline' in data:
         try:
             task.deadline = datetime.fromisoformat(data['deadline']) if data['deadline'] else None
         except ValueError:
-            return jsonify({"Ошибка": "Недопустимый формат дедлайна"}), 400
+            return jsonify({"Ошибка": "Некорректный формат даты дедлайна"}), 400
+
     task.completed = data.get('completed', task.completed)
 
     if 'tags' in data:
         task.tags.clear()
         for tag_name in data['tags']:
+
+            if not tag_name:
+                return jsonify({"Ошибка": "Имя тега не может быть пустым"}), 400
+
             tag = Tag.query.filter_by(name=tag_name).first() or Tag(name=tag_name)
             db.session.add(tag)
             task.tags.append(tag)
@@ -161,7 +189,7 @@ def delete_task(task_id):
     return jsonify({"Сообщение": "Задача удалена"})
 
 
-# === CRUD TAGS ===
+# ТЕГИ
 @app.route('/tags', methods=['POST'])
 def create_tag():
 
@@ -175,9 +203,16 @@ def create_tag():
 
     try:
         data = request.get_json()
+        name = data.get('name')
+
         validate(instance=data, schema=tag_schema)
+
+        if not name or name.strip() == "":
+            return jsonify({"Ошибка": "Имя тега не может быть пустым"}), 400
+
         if Tag.query.filter_by(name=data['name']).first():
             return jsonify({"Ошибка": "Тег с таким именем уже существует"}), 400
+
         new_tag = Tag(name=data['name'])
         db.session.add(new_tag)
         db.session.commit()
@@ -221,10 +256,17 @@ def update_tag(tag_id):
 
     tag = Tag.query.get_or_404(tag_id)
     data = request.get_json()
+    name = data.get('name')
+
     try:
         validate(instance=data, schema=tag_schema)
+
+        if not name or name.strip() == "":
+            return jsonify({"Ошибка": "Имя тега не может быть пустым"}), 400
+
         if Tag.query.filter(Tag.id != tag_id, Tag.name == data['name']).first():
             return jsonify({"Ошибка": "Тег с таким именем уже существует"}), 400
+
         tag.name = data['name']
         db.session.commit()
         return jsonify(tag.to_dict())
