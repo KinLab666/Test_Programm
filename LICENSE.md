@@ -1,3 +1,6 @@
+The MIT License (MIT)
+=====================
+
 Copyright (C) Nikita Balabanov
 
 Permission is hereby granted, free of charge, to any person obtaining
